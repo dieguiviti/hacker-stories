@@ -20,6 +20,11 @@ const list = [
 ]
 
 const App = () => {
+  // Change Handler
+  const handleChange = (e) => {
+    console.log(e.target.value)
+  }
+
   return (
     <div>
       <h1>Hacker Stories</h1>
@@ -27,7 +32,11 @@ const App = () => {
       <label htmlFor='search'>
         Search:{' '}
       </label>
-      <input id='search' type='text' />
+      <input
+        id='search'
+        type='text'
+        onChange={handleChange}
+      />
 
       <hr />
 
