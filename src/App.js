@@ -1,3 +1,5 @@
+import React from 'react'
+// Styles
 import './App.css'
 
 const App = () => {
@@ -21,9 +23,15 @@ const App = () => {
     },
   ]
 
+  // state
+  const [
+    searchTerm,
+    setSearchTerm,
+  ] = React.useState('')
+
   // Change Handler
   const handleChange = (e) => {
-    console.log(e.target.value)
+    setSearchTerm(e.target.value)
   }
 
   return (
@@ -38,6 +46,12 @@ const App = () => {
         type='text'
         onChange={handleChange}
       />
+
+      <p>
+        Searching for{' '}
+        <strong>{searchTerm}</strong>
+        ...
+      </p>
 
       <hr />
 
