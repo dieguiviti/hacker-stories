@@ -23,35 +23,16 @@ const App = () => {
     },
   ]
 
-  // state
-  const [
-    searchTerm,
-    setSearchTerm,
-  ] = React.useState('')
-
-  // Change Handler
-  const handleChange = (e) => {
-    setSearchTerm(e.target.value)
+  // Search Handler
+  const handleSearch = (e) => {
+    console.log(e.target.value)
   }
 
   return (
     <div>
       <h1>Hacker Stories</h1>
 
-      <label htmlFor='search'>
-        Search:{' '}
-      </label>
-      <input
-        id='search'
-        type='text'
-        onChange={handleChange}
-      />
-
-      <p>
-        Searching for{' '}
-        <strong>{searchTerm}</strong>
-        ...
-      </p>
+      <Search onSearch={handleSearch} />
 
       <hr />
 
@@ -75,6 +56,41 @@ const List = (props) => {
           <span>{item.points}</span>
         </div>
       ))}
+    </div>
+  )
+}
+
+const Search = (props) => {
+  // Search Term state
+  const [
+    searchTerm,
+    setSearchTerm,
+  ] = React.useState('')
+
+  // Change Handler
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value)
+
+    // Callback Handler
+    props.onSearch(e)
+  }
+
+  return (
+    <div>
+      <label htmlFor='search'>
+        Search:{' '}
+      </label>
+      <input
+        id='search'
+        type='text'
+        onChange={handleChange}
+      />
+
+      <p>
+        Searching for{' '}
+        <strong>{searchTerm}</strong>
+        ...
+      </p>
     </div>
   )
 }
