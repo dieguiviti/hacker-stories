@@ -46,7 +46,10 @@ const App = () => {
     <div>
       <h1>Hacker Stories</h1>
 
-      <Search onSearch={handleSearch} />
+      <Search
+        search={searchTerm}
+        onSearch={handleSearch}
+      />
 
       <hr />
 
@@ -84,6 +87,7 @@ const Search = (props) => {
         id='search'
         type='text'
         onChange={props.onSearch}
+        value={props.searchTerm}
       />
     </div>
   )
