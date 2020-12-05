@@ -27,7 +27,18 @@ const App = () => {
   const [
     searchTerm,
     setSearchTerm,
-  ] = React.useState('')
+  ] = React.useState(
+    window.localStorage.getItem('search') ||
+      ''
+  )
+
+  // side-effects
+  React.useEffect(() => {
+    window.localStorage.setItem(
+      'search',
+      searchTerm
+    )
+  }, [searchTerm])
 
   // Search Handler
   const handleSearch = (e) => {
