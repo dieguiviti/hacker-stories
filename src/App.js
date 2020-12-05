@@ -67,6 +67,7 @@ const App = () => {
         onInputChange={handleSearch}
         type='search'
         id='search'
+        isFocused
       >
         Search:
       </InputWithLabel>
@@ -109,17 +110,32 @@ const InputWithLabel = ({
   onInputChange,
   type,
   children,
-}) => (
-  <>
-    <label htmlFor={id}>{children}</label>
-    &nbsp;
-    <input
-      id={id}
-      type={type}
-      onChange={onInputChange}
-      value={value}
-    />
-  </>
-)
+  isFocused,
+}) => {
+  // Input reference
+  const inputRef = React.useRef()
+
+  // Side effect to programmatically focus component
+  React.useEffect(() => {
+    if (isFocused && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [isFocused])
+
+  return (
+    <>
+      <label htmlFor={id}>{children}</label>
+      &nbsp;
+      <input
+        ref={inputRef}
+        autoFocus={isFocused}
+        id={id}
+        type={type}
+        onChange={onInputChange}
+        value={value}
+      />
+    </>
+  )
+}
 
 export default App
