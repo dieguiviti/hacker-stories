@@ -39,6 +39,7 @@ const App = () => {
     },
   ]
 
+  // Custom hook: Semi Persitent State
   const [
     searchTerm,
     setSearchTerm,
@@ -61,10 +62,14 @@ const App = () => {
     <div>
       <h1>Hacker Stories</h1>
 
-      <Search
-        search={searchTerm}
-        onSearch={handleSearch}
-      />
+      <InputWithLabel
+        value={searchTerm}
+        onInputChange={handleSearch}
+        type='search'
+        id='search'
+      >
+        Search:
+      </InputWithLabel>
 
       <hr />
 
@@ -98,16 +103,23 @@ const Item = ({
   </div>
 )
 
-const Search = ({ search, onSearch }) => (
-  <div>
-    <label htmlFor='search'>Search: </label>
+const InputWithLabel = ({
+  id,
+  value,
+  onInputChange,
+  type,
+  children,
+}) => (
+  <>
+    <label htmlFor={id}>{children}</label>
+    &nbsp;
     <input
-      id='search'
-      type='text'
-      onChange={onSearch}
-      value={search}
+      id={id}
+      type={type}
+      onChange={onInputChange}
+      value={value}
     />
-  </div>
+  </>
 )
 
 export default App
