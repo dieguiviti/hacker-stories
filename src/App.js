@@ -2,6 +2,22 @@ import React from 'react'
 // Styles
 import './App.css'
 
+const useSemiPersistentState = (
+  key,
+  initialState
+) => {
+  const [value, setValue] = React.useState(
+    window.localStorage.getItem(key) ||
+      initialState
+  )
+
+  React.useEffect(() => {
+    window.localStorage.setItem(key, value)
+  }, [value, key])
+
+  return [value, setValue]
+}
+
 const App = () => {
   // Stories
   const stories = [
@@ -23,22 +39,10 @@ const App = () => {
     },
   ]
 
-  // state
   const [
     searchTerm,
     setSearchTerm,
-  ] = React.useState(
-    window.localStorage.getItem('search') ||
-      ''
-  )
-
-  // side-effects
-  React.useEffect(() => {
-    window.localStorage.setItem(
-      'search',
-      searchTerm
-    )
-  }, [searchTerm])
+  ] = useSemiPersistentState('search', '')
 
   // Search Handler
   const handleSearch = (e) => {
@@ -94,17 +98,14 @@ const Item = ({
   </div>
 )
 
-const Search = ({
-  searchTerm,
-  onSearch,
-}) => (
+const Search = ({ search, onSearch }) => (
   <div>
     <label htmlFor='search'>Search: </label>
     <input
       id='search'
       type='text'
       onChange={onSearch}
-      value={searchTerm}
+      value={search}
     />
   </div>
 )
