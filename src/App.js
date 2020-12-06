@@ -2,6 +2,26 @@ import React from 'react'
 // Styles
 import './App.css'
 
+// Initial Stories
+const initialStories = [
+  {
+    title: 'React',
+    url: 'https://reactjs.org/',
+    author: 'Jordan Walke',
+    num_comments: 3,
+    points: 4,
+    objectID: 0,
+  },
+  {
+    title: 'Redux',
+    url: 'https://redux.js.org/',
+    author: 'Dan Abramov, Andrew Clark',
+    num_comments: 2,
+    points: 5,
+    objectID: 1,
+  },
+]
+
 const useSemiPersistentState = (
   key,
   initialState
@@ -19,25 +39,11 @@ const useSemiPersistentState = (
 }
 
 const App = () => {
-  // Stories
-  const stories = [
-    {
-      title: 'React',
-      url: 'https://reactjs.org/',
-      author: 'Jordan Walke',
-      num_comments: 3,
-      points: 4,
-      objectID: 0,
-    },
-    {
-      title: 'Redux',
-      url: 'https://redux.js.org/',
-      author: 'Dan Abramov, Andrew Clark',
-      num_comments: 2,
-      points: 5,
-      objectID: 1,
-    },
-  ]
+  // State
+  const [
+    stories,
+    setStories,
+  ] = React.useState(initialStories)
 
   // Custom hook: Semi Persitent State
   const [
@@ -48,6 +54,17 @@ const App = () => {
   // Search Handler
   const handleSearch = (e) => {
     setSearchTerm(e.target.value)
+  }
+
+  // Handle story removal
+  const handleStoryRemoval = (id) => {
+    console.log(id)
+    const newStories = stories.filter(
+      (s) => s.objectID !== id
+    )
+
+    console.log(newStories)
+    setStories(newStories)
   }
 
   // Searched stories
@@ -74,25 +91,34 @@ const App = () => {
 
       <hr />
 
-      <List list={searchedStories} />
+      <List
+        list={searchedStories}
+        onRemoveItem={handleStoryRemoval}
+      />
     </div>
   )
 }
 
-const List = ({ list }) => (
+const List = ({ list, onRemoveItem }) => (
   <div>
-    {list.map(({ objectID, ...item }) => (
-      <Item key={objectID} {...item} />
+    {list.map((item) => (
+      <Item
+        key={item.objectID}
+        {...item}
+        onRemoveItem={onRemoveItem}
+      />
     ))}
   </div>
 )
 
 const Item = ({
+  objectID,
   title,
   url,
   author,
   num_comments,
   points,
+  onRemoveItem,
 }) => (
   <div>
     <span>
@@ -101,6 +127,16 @@ const Item = ({
     <span>{author}</span>
     <span>{num_comments}</span>
     <span>{points}</span>
+    <span>
+      <button
+        type='button'
+        onClick={() =>
+          onRemoveItem(objectID)
+        }
+      >
+        Dismiss
+      </button>
+    </span>
   </div>
 )
 
