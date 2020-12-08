@@ -58,12 +58,9 @@ const App = () => {
 
   // Handle story removal
   const handleStoryRemoval = (id) => {
-    console.log(id)
     const newStories = stories.filter(
       (s) => s.objectID !== id
     )
-
-    console.log(newStories)
     setStories(newStories)
   }
 
