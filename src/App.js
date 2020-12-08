@@ -43,13 +43,33 @@ const App = () => {
   const [
     stories,
     setStories,
-  ] = React.useState(initialStories)
+  ] = React.useState([])
+
+  // Asynchronous data load effect
+  React.useEffect(() => {
+    getAsyncStories().then((result) =>
+      setStories(result.data.stories)
+    )
+  }, [])
 
   // Custom hook: Semi Persitent State
   const [
     searchTerm,
     setSearchTerm,
   ] = useSemiPersistentState('search', '')
+
+  const getAsyncStories = () =>
+    new Promise((resolve) =>
+      setTimeout(
+        () =>
+          resolve({
+            data: {
+              stories: initialStories,
+            },
+          }),
+        1500
+      )
+    )
 
   // Search Handler
   const handleSearch = (e) => {
