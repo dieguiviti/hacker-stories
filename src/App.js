@@ -22,6 +22,26 @@ const initialStories = [
   },
 ]
 
+const storiesReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_STORIES':
+      return action.payload
+    case 'REMOVE_STORY':
+      return state.filter(
+        (story) =>
+          story.objectID !== action.payload
+      )
+    default:
+      throw new Error(
+        `error with state:\n${JSON.stringify(
+          state
+        )}\nerror with action:\n${JSON.stringify(
+          action
+        )}`
+      )
+  }
+}
+
 const useSemiPersistentState = (
   key,
   initialState
@@ -42,8 +62,8 @@ const App = () => {
   // State
   const [
     stories,
-    setStories,
-  ] = React.useState([])
+    dispatchStories,
+  ] = React.useReducer(storiesReducer, [])
   const [
     isLoading,
     setIsLoading,
@@ -58,7 +78,10 @@ const App = () => {
 
     getAsyncStories()
       .then((result) => {
-        setStories(result.data.stories)
+        dispatchStories({
+          type: 'SET_STORIES',
+          payload: result.data.stories,
+        })
         setIsLoading(false)
       })
       .catch((error) => setError(true))
@@ -90,10 +113,10 @@ const App = () => {
 
   // Handle story removal
   const handleStoryRemoval = (id) => {
-    const newStories = stories.filter(
-      (s) => s.objectID !== id
-    )
-    setStories(newStories)
+    dispatchStories({
+      type: 'REMOVE_STORY',
+      payload: id,
+    })
   }
 
   // Searched stories
