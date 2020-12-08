@@ -44,12 +44,24 @@ const App = () => {
     stories,
     setStories,
   ] = React.useState([])
+  const [
+    isLoading,
+    setIsLoading,
+  ] = React.useState(false)
+  const [error, setError] = React.useState(
+    false
+  )
 
   // Asynchronous data load effect
   React.useEffect(() => {
-    getAsyncStories().then((result) =>
-      setStories(result.data.stories)
-    )
+    setIsLoading(true)
+
+    getAsyncStories()
+      .then((result) => {
+        setStories(result.data.stories)
+        setIsLoading(false)
+      })
+      .catch((error) => setError(true))
   }, [])
 
   // Custom hook: Semi Persitent State
@@ -108,10 +120,18 @@ const App = () => {
 
       <hr />
 
-      <List
-        list={searchedStories}
-        onRemoveItem={handleStoryRemoval}
-      />
+      {error && (
+        <p>Something went wrong...</p>
+      )}
+
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <List
+          list={searchedStories}
+          onRemoveItem={handleStoryRemoval}
+        />
+      )}
     </div>
   )
 }
